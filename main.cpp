@@ -32,23 +32,23 @@ int main (  int argc ,  char * argv[]  ) {
 
     Field field( 10 , fieldSize ) ;
 //    field . setZValue( 0 ) ;
-    field . setPos( - halfField , - halfField ) ;
+    //field . setPos( - halfField , - halfField ) ;
+    field . setPos( 0 , 0 ) ;
     Ship::setField( &field ) ;
 
-    field . logicPoint( QPoint( 50 , 50 ) ) ;
-    field . physicPoint( QPoint( 3 , 3 ) ) ;
-
     QGraphicsScene scene;
-    scene.setSceneRect(-halfField - 5  , -halfField - 5
-            , fieldSize + 10  , fieldSize + 10 );
+    scene.setSceneRect( 0 , 0 ,  fieldSize + 10  , fieldSize + 10 );
     scene.setItemIndexMethod(QGraphicsScene::NoIndex);
 
-    Ship *ship = new Ship ( true , 3 );
-    ship -> setPos( field . physicPoint( QPoint( 0,0 ) ) ) ;
- //   ship -> setZValue( 2 ) ;
+//    Ship *ship = new Ship ( true , 3 );
+//    ship -> setPos(  QPoint( 1,1 ) ) ;
+//
+    Ship ship ( true , 3 );
+    ship . setPos(  QPoint( 1,1 ) ) ;
+
 
     scene . addItem( &field ) ;
-    scene . addItem( ship );
+    scene . addItem( & ship );
 /*
     for (int i = 0; i < MouseCount; ++i) {
         Mouse *mouse = new Mouse;
