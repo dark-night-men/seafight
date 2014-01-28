@@ -1,4 +1,5 @@
 #include "field.h"
+#include <QDebug>
 #include <assert.h>
 #include <QPixmap>
 #include <QPainter>
@@ -19,8 +20,15 @@ Field::Field( int logicSize , int physicSize )
     //: QGraphicsPixmapItem()
     : logicSize_ ( logicSize ) 
     , physicSize_ ( physicSize )
-    , shipSize_ ( physicSize/(float) logicSize ) 
+    , margin_ ( physicSize_ / ( (float) 50 ) )
+    , spacing_ ( margin_ / ( ( float ) 3 ) )
+    , shipSize_ ( 0 )
 {
+
+    shipSize_ = ( physicSize_ - 2*margin_ - ( logicSize_ - 1 ) * spacing_ ) / ( /*(float)*/ logicSize_ ) ;
+    dprint( QString( "ls %1 , ps %2 , m %3 , s %4 , ship %5"  ) .
+        arg( logicSize_  ) . arg( physicSize_ ) . arg( margin_ ) . arg( spacing_ ) . arg( shipSize_ ) ) ; 
+
     QPixmap *pix_ = new QPixmap( physicSize_ , physicSize_ ) ;
     QPainter *paint = new QPainter(pix_);
 
@@ -29,12 +37,30 @@ Field::Field( int logicSize , int physicSize )
 
     paint->setPen(*(new QColor(255,34,255,255)));
 
+    /*
     for ( int k =1 ; k < logicSize_ ; ++k ) {
 
         int v1 = k * physicSize_ / ( float ) logicSize_  ;
 
         paint -> drawLine( 0 , v1 , physicSize_ , v1  ) ;
         paint -> drawLine( v1 , 0 , v1 , physicSize_   ) ;
+    }
+    */
+    /*
+    for ( int k = 0 ; k < logicSize_ ; ++k  ) {
+        for ( int j = 0 ; j < logicSize_ ; ++j  ) {
+
+            paint -> drawRect( margin_ + j*( shipSize_ + spacing_ ) , margin_ + k*( shipSize_ + spacing_ )
+                    , shipSize_ , shipSize_ ) ;
+        }
+    }
+    */
+
+    for ( int k = 0 ; k < logicSize_ ; ++k  ) {
+        for ( int j = 0 ; j < logicSize_ ; ++j  ) {
+
+            paint -> drawRect( QRect( physicPoint( QPoint ( j , k ) ) , QSize(  shipSize_ , shipSize_ ) ) ) ;
+        }
     }
 
     paint->drawRect(0,0,physicSize_,physicSize_);
@@ -61,9 +87,26 @@ void Field::assertOutOfPhysicalField( const QPoint & p) {
 
 QPoint Field::logicPoint ( const QPoint & p ) {
     assertOutOfPhysicalField( p ) ;
-    
-    QPoint pr( p.x()*(float) logicSize_/physicSize_ 
-            , p.y()*(float) logicSize_/physicSize_ ) ;
+
+    int k = ( p . x() - margin_ ) / ( shipSize_ + spacing_ ) ;
+    int k1 = ( p . x() - margin_ ) % ( shipSize_ + spacing_ ) ;
+
+    int q = ( p . y() - margin_ ) / ( shipSize_ + spacing_ ) ;
+    int q1 = ( p . y() - margin_ ) % ( shipSize_ + spacing_ ) ;
+
+    int nx , ny = -1 ;
+    if ( k1 > 0 and k1 < shipSize_ ){
+       nx = k ; 
+    }
+
+    if ( q1 > 0 and q1 < shipSize_ ){
+       ny = q ; 
+    }
+
+   
+    //QPoint pr( p.x()*(float) logicSize_/physicSize_ 
+    //        , p.y()*(float) logicSize_/physicSize_ ) ;
+    QPoint pr ( nx , ny ) ;
     dprint( QString( "Field::logicPoint in- %1 ; out- %2"  ) 
             . arg( point2String( p ) ) . arg( point2String( pr ) )  ) ;
 
@@ -74,8 +117,13 @@ QPoint Field::logicPoint ( const QPoint & p ) {
 QPoint Field::physicPoint ( const QPoint & p ) {
     assertOutOfLogicalField( p ) ;
 
-    QPoint pr( p.x()*physicSize_ / (float) logicSize_ 
-            , p.y()*physicSize_ / (float) logicSize_ ) ;
+
+
+    //QPoint pr( p.x()*physicSize_ / (float) logicSize_ 
+    //        , p.y()*physicSize_ / (float) logicSize_ ) ;
+      
+    QPoint pr( margin_ + p . x() * ( shipSize_ + spacing_ ) , margin_ + p . y() * ( shipSize_ + spacing_ )) ;
+
     dprint( QString( "Field::physicPoint in- %1 ; out- %2"  ) 
             . arg( point2String( p ) ) . arg( point2String( pr ) )  ) ;
 

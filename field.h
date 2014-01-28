@@ -35,6 +35,9 @@ private :
     int shipSize_ ;
 
     QPixmap * pix_ ;
+
+    int margin_ ;
+    int spacing_ ;
 } ;
 
 

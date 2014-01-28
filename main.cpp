@@ -44,7 +44,7 @@ int main (  int argc ,  char * argv[]  ) {
 //    ship -> setPos(  QPoint( 1,1 ) ) ;
 //
     Ship ship ( true , 3 );
-    ship . setPos(  QPoint( 1,1 ) ) ;
+    ship . setPos( field . physicPoint(  QPoint( 1,1 ) ) ) ;
 
 
     scene . addItem( &field ) ;
