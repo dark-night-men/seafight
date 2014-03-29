@@ -20,9 +20,9 @@ Field::Field( int logicSize , int physicSize )
     //: QGraphicsPixmapItem()
     : logicSize_ ( logicSize ) 
     , physicSize_ ( physicSize )
+    , shipSize_ ( 0 )
     , margin_ ( physicSize_ / ( (float) 50 ) )
     , spacing_ ( margin_ / ( ( float ) 3 ) )
-    , shipSize_ ( 0 )
 {
 
     shipSize_ = ( physicSize_ - 2*margin_ - ( logicSize_ - 1 ) * spacing_ ) / ( /*(float)*/ logicSize_ ) ;
