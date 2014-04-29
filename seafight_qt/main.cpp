@@ -28,38 +28,27 @@ int main (  int argc ,  char * argv[]  ) {
     msgBox.setText( "seafight has been started" );
     msgBox.exec();
 
+    //return app.exec() ;
+
+
     const int fieldSize = QApplication::desktop() -> width() / ( float ) 2 ;
     const int halfField = fieldSize / ( float ) 2 ;
 
-    Field field( 10 , fieldSize ) ;
-//    field . setZValue( 0 ) ;
-    //field . setPos( - halfField , - halfField ) ;
-    field . setPos( 0 , 0 ) ;
-    Ship::setField( &field ) ;
+    Field * field = new Field( 10 , fieldSize ) ;
+    field -> setPos( 0 , 0 ) ;
+    Ship::setField( field ) ;
 
-    QGraphicsScene scene;
-    scene.setSceneRect( 0 , 0 ,  fieldSize + 10  , fieldSize + 10 );
-    scene.setItemIndexMethod(QGraphicsScene::NoIndex);
+    QGraphicsScene * scene = new QGraphicsScene ;
+    scene -> setSceneRect( 0 , 0 ,  fieldSize + 10  , fieldSize + 10 );
+    scene -> setItemIndexMethod(QGraphicsScene::NoIndex);
 
-//    Ship *ship = new Ship ( true , 3 );
-//    ship -> setPos(  QPoint( 1,1 ) ) ;
-//
-    Ship ship ( true , 3 );
-    ship . setPos( field . physicPoint(  QPoint( 1,1 ) ) ) ;
+    Ship * ship = new Ship( true , 3 );
+    ship -> setPos( field -> physicPoint(  QPoint( 1,1 ) ) ) ;
 
+    scene -> addItem( field ) ;
+    scene -> addItem( ship );
 
-    scene . addItem( &field ) ;
-    scene . addItem( & ship );
-/*
-    for (int i = 0; i < MouseCount; ++i) {
-        Mouse *mouse = new Mouse;
-        mouse->setPos(::sin((i * 6.28) / MouseCount) * 200,
-                      ::cos((i * 6.28) / MouseCount) * 200);
-        scene.addItem(mouse);
-    }
-*/
-
-    QGraphicsView view(&scene);
+    QGraphicsView view( scene );
     view.setRenderHint(QPainter::Antialiasing);
     view.setCacheMode(QGraphicsView::CacheBackground);
     view.setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
@@ -76,9 +65,11 @@ int main (  int argc ,  char * argv[]  ) {
 #endif
 
     QTimer timer;
-    QObject::connect(&timer, SIGNAL(timeout()), &scene, SLOT(advance()));
-    timer.start(1000 / 33);
+    QObject::connect(&timer, SIGNAL(timeout()), scene, SLOT(advance()));
+    timer.start( 1000 / 33 );
 
-    return app . exec() ;
+    int result =  app . exec() ;
+
+    return result ;
 
 }

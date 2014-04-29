@@ -8,7 +8,6 @@ class Field : public QGraphicsPixmapItem {
 public :
 
     Field( int logicSize , int physicSize ) ;
-    virtual ~Field( ) ;
 
     void assertOutOfLogicalField( const QPoint & ) ;
     void assertOutOfPhysicalField( const QPoint & ) ;

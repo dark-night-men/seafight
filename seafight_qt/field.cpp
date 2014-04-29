@@ -68,10 +68,6 @@ Field::Field( int logicSize , int physicSize )
     setPixmap( *pix_ );
 }
 
- Field::~Field( ) {
-    //delete pix_ ;
-}
-
 void Field::assertOutOfLogicalField( const QPoint & p ) {
     assert( p.x() > -1 and p.x() < logicSize_ and
             p.y() > -1 and p.y() < logicSize_ ) ;
@@ -94,7 +90,8 @@ QPoint Field::logicPoint ( const QPoint & p ) {
     int q = ( p . y() - margin_ ) / ( shipSize_ + spacing_ ) ;
     int q1 = ( p . y() - margin_ ) % ( shipSize_ + spacing_ ) ;
 
-    int nx , ny = -1 ;
+    int nx = -1 ;
+    int ny = -1 ;
     if ( k1 > 0 and k1 < shipSize_ ){
        nx = k ; 
     }
