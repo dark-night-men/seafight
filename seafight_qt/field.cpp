@@ -6,15 +6,18 @@
 #include <QColor>
 
 
-void dprint( const QString & s ) {
+void dprint( const QString & s ) 
+{
     qDebug( qPrintable( s ) ) ;
 }
 
-QString point2String( const QPoint & p ) {
-
+template < typename T >
+QString point2String( const T & p ) 
+{
     return QString( "x:%1 y:%2" ) . arg( p.x() ) . arg( p.y() ) ;
-
 }
+
+
 
 Field::Field( int logicSize , int physicSize )
     //: QGraphicsPixmapItem()
@@ -35,27 +38,7 @@ Field::Field( int logicSize , int physicSize )
     paint -> fillRect( QRect( QPoint( 0 , 0 ) 
         , QSize( physicSize_ , physicSize_ ) ) , Qt::gray ) ;
 
-    paint->setPen(*(new QColor(255,34,255,255)));
-
-    /*
-    for ( int k =1 ; k < logicSize_ ; ++k ) {
-
-        int v1 = k * physicSize_ / ( float ) logicSize_  ;
-
-        paint -> drawLine( 0 , v1 , physicSize_ , v1  ) ;
-        paint -> drawLine( v1 , 0 , v1 , physicSize_   ) ;
-    }
-    */
-    /*
-    for ( int k = 0 ; k < logicSize_ ; ++k  ) {
-        for ( int j = 0 ; j < logicSize_ ; ++j  ) {
-
-            paint -> drawRect( margin_ + j*( shipSize_ + spacing_ ) , margin_ + k*( shipSize_ + spacing_ )
-                    , shipSize_ , shipSize_ ) ;
-        }
-    }
-    */
-
+    paint->setPen( QColor(255,34,255,255) );
     for ( int k = 0 ; k < logicSize_ ; ++k  ) {
         for ( int j = 0 ; j < logicSize_ ; ++j  ) {
 
@@ -63,25 +46,29 @@ Field::Field( int logicSize , int physicSize )
         }
     }
 
+    paint->setPen( QColor( Qt::yellow  ) );
     paint->drawRect(0,0,physicSize_,physicSize_);
 
     setPixmap( *pix_ );
 }
 
-void Field::assertOutOfLogicalField( const QPoint & p ) {
+void Field::assertOutOfLogicalField( const QPoint & p ) 
+{
     assert( p.x() > -1 and p.x() < logicSize_ and
             p.y() > -1 and p.y() < logicSize_ ) ;
 }
 
 
-void Field::assertOutOfPhysicalField( const QPoint & p) {
+void Field::assertOutOfPhysicalField( const QPoint & p) 
+{
     assert( p.x() > -1 and p.x() < physicSize_ and
             p.y() > -1 and p.y() < physicSize_ ) ;
 }
 
 
 
-QPoint Field::logicPoint ( const QPoint & p ) {
+QPoint Field::logicPoint ( const QPoint & p ) 
+{
     assertOutOfPhysicalField( p ) ;
 
     int k = ( p . x() - margin_ ) / ( shipSize_ + spacing_ ) ;
@@ -104,28 +91,47 @@ QPoint Field::logicPoint ( const QPoint & p ) {
     //QPoint pr( p.x()*(float) logicSize_/physicSize_ 
     //        , p.y()*(float) logicSize_/physicSize_ ) ;
     QPoint pr ( nx , ny ) ;
-    dprint( QString( "Field::logicPoint in- %1 ; out- %2"  ) 
-            . arg( point2String( p ) ) . arg( point2String( pr ) )  ) ;
+//    dprint( QString( "Field::logicPoint in- %1 ; out- %2"  ) 
+//            . arg( point2String( p ) ) . arg( point2String( pr ) )  ) ;
 
     return pr ;
 }
 
 //returns top left corner coords of the cell
-QPoint Field::physicPoint ( const QPoint & p ) {
+QPoint Field::physicPoint ( const QPoint & p ) 
+{
     assertOutOfLogicalField( p ) ;
-
-
 
     //QPoint pr( p.x()*physicSize_ / (float) logicSize_ 
     //        , p.y()*physicSize_ / (float) logicSize_ ) ;
       
     QPoint pr( margin_ + p . x() * ( shipSize_ + spacing_ ) , margin_ + p . y() * ( shipSize_ + spacing_ )) ;
 
-    dprint( QString( "Field::physicPoint in- %1 ; out- %2"  ) 
-            . arg( point2String( p ) ) . arg( point2String( pr ) )  ) ;
+    //dprint( QString( "Field::physicPoint in- %1 ; out- %2"  ) 
+    //        . arg( point2String( p ) ) . arg( point2String( pr ) )  ) ;
 
     return pr ;
 
 }
 
+QSize Field::shipSize( int size , bool horizontal ) const 
+{
+    Q_ASSERT( size < logicSize_ ) ;
 
+
+    QSize shipSize( shipSize_ * size + spacing_ * ( size  - 1 ) , shipSize_ ) ;  
+    return horizontal ? shipSize : shipSize . transposed() ;
+}
+
+
+void  Field::mouseMoveEvent( QGraphicsSceneMouseEvent * event ) 
+{
+    dprint( QString( "mouseMoveEvent %1"  ) . arg( point2String( event -> scenePos() ) ) );
+
+}
+
+void  Field::mousePressEvent( QGraphicsSceneMouseEvent * event ) 
+{
+    dprint( QString( "mousePressEvent %1"  ) . arg( point2String( event -> scenePos() ) ) );
+
+}

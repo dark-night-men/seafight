@@ -1,6 +1,7 @@
 #ifndef FIELD_H
 #define FIELD_H
 
+#include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
 
@@ -19,6 +20,8 @@ public :
         return shipSize_ ;
     }
 
+    QSize shipSize( int size , bool horizontal = true) const ;
+
     int logicSize() const {
         return logicSize_ ;
     }
@@ -26,6 +29,14 @@ public :
     int physicSize() const {
         return physicSize_ ;
     }
+
+    int spacing() const {
+        return spacing_ ;
+    }
+
+
+    void  mouseMoveEvent( QGraphicsSceneMouseEvent * event ) ;
+    void  mousePressEvent( QGraphicsSceneMouseEvent * event ) ;
 
 private :
 
