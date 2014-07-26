@@ -8,7 +8,8 @@
 
 void dprint( const QString & s ) 
 {
-    qDebug( qPrintable( s ) ) ;
+//    qDebug( qPrintable( s ) ) ;
+    qDebug() << s ;
 }
 
 template < typename T >
@@ -31,6 +32,8 @@ Field::Field( int logicSize , int physicSize )
     shipSize_ = ( physicSize_ - 2*margin_ - ( logicSize_ - 1 ) * spacing_ ) / ( /*(float)*/ logicSize_ ) ;
     dprint( QString( "ls %1 , ps %2 , m %3 , s %4 , ship %5"  ) .
         arg( logicSize_  ) . arg( physicSize_ ) . arg( margin_ ) . arg( spacing_ ) . arg( shipSize_ ) ) ; 
+
+    setAcceptHoverEvents( true ) ;
 
     QPixmap *pix_ = new QPixmap( physicSize_ , physicSize_ ) ;
     QPainter *paint = new QPainter(pix_);
@@ -133,5 +136,14 @@ void  Field::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 void  Field::mousePressEvent( QGraphicsSceneMouseEvent * event ) 
 {
     dprint( QString( "mousePressEvent %1"  ) . arg( point2String( event -> scenePos() ) ) );
+
+}
+
+
+
+void  Field::hoverMoveEvent( QGraphicsSceneHoverEvent * event ) 
+{
+
+    dprint( QString( "hoverMoveEvent %1"  ) . arg( point2String( event -> scenePos() ) ) );
 
 }

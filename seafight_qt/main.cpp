@@ -32,7 +32,7 @@ int main (  int argc ,  char * argv[]  ) {
 
 
     const int fieldSize = QApplication::desktop() -> width() / ( float ) 2 ;
-    const int halfField = fieldSize / ( float ) 2 ;
+    //const int halfField = fieldSize / ( float ) 2 ;
 
     Field * field = new Field( 10 , fieldSize ) ;
     field -> setPos( 0 , 0 ) ;

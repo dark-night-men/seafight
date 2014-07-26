@@ -1,6 +1,7 @@
 #ifndef FIELD_H
 #define FIELD_H
 
+#include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
@@ -37,6 +38,7 @@ public :
 
     void  mouseMoveEvent( QGraphicsSceneMouseEvent * event ) ;
     void  mousePressEvent( QGraphicsSceneMouseEvent * event ) ;
+    void  hoverMoveEvent( QGraphicsSceneHoverEvent * event ) ;
 
 private :
 
